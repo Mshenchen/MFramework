@@ -2,11 +2,21 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class Teeeest : MonoBehaviour
+public class TestTest
+{
+    public void Update()
+    {
+        Debug.Log("TestTest");
+    }
+}
+public class Test02 : MonoBehaviour
 {
     private void Start()
     {
-        TestMono.GetInstance().Test();
+        TestTest t = new TestTest();
+        MonoMgr.GetInstance().AddUpdateListener(t.Update);
     }
+    
 }
