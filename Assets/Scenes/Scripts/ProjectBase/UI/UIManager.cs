@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// UI层级枚举
@@ -39,6 +40,27 @@ public class UIManager : BaseManager<UIManager>
         //创建EventSystem 让其过场景的时候  不被移除
         obj = ResMgr.GetInstance().Load<GameObject>("UI/EventSystem");
         GameObject.DontDestroyOnLoad(obj);
+    }
+    /// <summary>
+    /// 通过层级枚举 得到对应层级的父对象
+    /// </summary>
+    /// <param name="layer"></param>
+    /// <returns></returns>
+    public Transform GetLayerFather(E_UI_Layer layer)
+    {
+        switch (layer)
+        {
+            case E_UI_Layer.Bot:
+                return this.bot;
+            case E_UI_Layer.Mid:
+                return this.mid;
+            case E_UI_Layer.Top:
+                return this.top;
+            case E_UI_Layer.System:
+                return this.system;
+        }
+
+        return null;
     }
     /// <summary>
     /// 显示面板
@@ -108,5 +130,22 @@ public class UIManager : BaseManager<UIManager>
         if (panelDic.ContainsKey(name))
             return panelDic[name] as T;
         return null;
+    }
+    /// <summary>
+    /// 给控件添加自定义事件监听
+    /// </summary>
+    /// <param name="control">控件对象</param>
+    /// <param name="type">事件类型</param>
+    /// <param name="callBack">事件的响应函数</param>
+    public static void AddCustomEventListener(UIBehaviour control, EventTriggerType type,
+        UnityAction<BaseEventData> callBack)
+    {
+        EventTrigger trigger = control.GetComponent<EventTrigger>();
+        if (trigger == null)
+            trigger = control.gameObject.AddComponent<EventTrigger>();
+        EventTrigger.Entry entry = new EventTrigger.Entry();
+        entry.eventID = type;
+        entry.callback.AddListener(callBack);
+        trigger.triggers.Add(entry);
     }
 }

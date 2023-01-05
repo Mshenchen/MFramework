@@ -7,9 +7,10 @@ using UnityEngine.UI;
 
 public class BasePanel : MonoBehaviour
 {
+    //里式转换原则来存储所有的控件
     private Dictionary<string, List<UIBehaviour>> controlDic = new Dictionary<string, List<UIBehaviour>>();
 
-    private void Awake()
+    protected virtual void Awake()
     {
         FindChildrenControl<Button>();
         FindChildrenControl<Image>();
@@ -17,6 +18,7 @@ public class BasePanel : MonoBehaviour
         FindChildrenControl<Toggle>();
         FindChildrenControl<Slider>();
         FindChildrenControl<ScrollRect>();
+        FindChildrenControl<InputField>();
     }
 
     protected T GetControl<T>(string controlName) where T : UIBehaviour
@@ -47,6 +49,10 @@ public class BasePanel : MonoBehaviour
     {
         
     }
+    protected virtual void OnValueChanged(string toggleName,bool value)
+    {
+        
+    }
     /// <summary>
     /// 找到子对象的对应控件
     /// </summary>
@@ -67,6 +73,14 @@ public class BasePanel : MonoBehaviour
                 (controls[i] as Button).onClick.AddListener(() =>
                 {
                     OnClick(objName);
+                });
+            }
+            //判断如果是单选或多选框
+            else if (controls[i] is Toggle)
+            {
+                (controls[i] as Toggle).onValueChanged.AddListener((value) =>
+                {
+                    OnValueChanged(objName,value);
                 });
             }
         }
