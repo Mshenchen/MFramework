@@ -59,7 +59,6 @@ public class PoolMgr : BaseManager<PoolMgr>
             //obj.name = name;
         }
     }
-
     public void PushObj(string name, GameObject obj)
     {
         if (poolObj == null)

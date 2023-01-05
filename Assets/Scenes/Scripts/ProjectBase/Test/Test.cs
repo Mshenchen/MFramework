@@ -25,6 +25,7 @@ public class Test : MonoBehaviour
                 obj.transform.localScale = Vector3.one * 3;
             });
         }
+
     }
 
     void dosomething(GameObject obj)
